@@ -106,9 +106,6 @@ const hasAllowedScheme = (url) => {
 };
 
 const getConfig = async () => {
-  if (ADMIN == null && NO_PASS == false) {
-    return;
-  }
   if (CONFIG == null || NO_PASS) {
     const res = await fetch(prepSubdir("/api/getconfig"), {
       cache: "no-cache",
@@ -124,6 +121,14 @@ const getConfig = async () => {
       cacheConfig(config);
     } else {
       return;
+    }
+  }
+
+  // Handle custom branding logo
+  if (CONFIG.custom_logo_url) {
+    const logoImg = document.querySelector("#logo img");
+    if (logoImg) {
+      logoImg.src = CONFIG.custom_logo_url;
     }
   }
 
@@ -173,8 +178,39 @@ const showLogin = () => {
     document.getElementById("version-number").hidden = true;
     document.getElementById("admin-button").hidden = true;
     document.getElementById("container").style.filter = "blur(2px)";
-    document.getElementById("login-dialog").showModal();
-    document.getElementById("password").focus();
+    
+    const loginDialog = document.getElementById("login-dialog");
+    const googleContainer = document.getElementById("google-login-container");
+    const passDiv = document.querySelector("#login-dialog form div:nth-of-type(1)");
+    const rememberLabel = document.querySelector("#login-dialog label[for='login-checkbox']");
+    const loginButton = document.querySelector("#login-dialog form button.pure-button-primary");
+    const promptText = document.querySelector("#login-dialog form p");
+
+    if (CONFIG && CONFIG.google_auth_enabled) {
+      if (googleContainer) googleContainer.style.display = "block";
+      if (CONFIG.disable_password_auth) {
+        if (passDiv) passDiv.style.display = "none";
+        if (rememberLabel) rememberLabel.style.display = "none";
+        if (loginButton) loginButton.style.display = "none";
+        if (promptText) promptText.innerText = "Please sign in with Google to access this website.";
+      } else {
+        if (passDiv) passDiv.style.display = "block";
+        if (rememberLabel) rememberLabel.style.display = "block";
+        if (loginButton) loginButton.style.display = "block";
+        if (promptText) promptText.innerText = "Please enter password or sign in with Google to access this website.";
+      }
+    } else {
+      if (googleContainer) googleContainer.style.display = "none";
+      if (passDiv) passDiv.style.display = "block";
+      if (rememberLabel) rememberLabel.style.display = "block";
+      if (loginButton) loginButton.style.display = "block";
+      if (promptText) promptText.innerText = "Please enter password to access this website.";
+    }
+
+    loginDialog.showModal();
+    if (!CONFIG || !CONFIG.disable_password_auth) {
+      document.getElementById("password").focus();
+    }
   }
 };
 
@@ -763,7 +799,21 @@ const qrCodeButton = (shortlink) => {
     ctx.drawImage(oldCanvas, qrPadding, qrPadding);
 
     const img = new Image();
-    img.src = "assets/favicon.svg";
+    img.src = CONFIG && CONFIG.custom_qr_logo_url ? CONFIG.custom_qr_logo_url : "assets/favicon.svg";
+    img.onerror = () => {
+      // If custom_qr_logo_url fails to load, fallback to "assets/favicon.svg"
+      if (img.src !== "assets/favicon.svg") {
+        img.src = "assets/favicon.svg";
+      } else {
+        // If fallback also fails, draw without logo
+        document.getElementById("qr-code").appendChild(newCanvas);
+        document.getElementById("container").style.filter = "blur(2px)";
+        document.getElementById("qr-code-dialog").showModal();
+        const qrDown = document.getElementById("qr-download-button");
+        qrDown.href = newCanvas.toDataURL();
+        qrDown.download = `chhoto-qr-${shortlink}.png`;
+      }
+    };
     img.onload = () => {
       ctx.fillStyle = "white";
       ctx.beginPath();

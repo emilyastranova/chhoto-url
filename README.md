@@ -77,6 +77,8 @@ Password: `chhoto-url-demo-pass`
 - Has a robust JSON-RPC adjacent API.
 - Has a mobile friendly UI, and automatic dark mode.
 - Supports customized site title, and can even serve a custom landing page, if needed.
+- Supports custom branding with a custom logo URL on the main page, and a separate custom logo inside generated QR codes.
+- Supports Google OAuth (SSO) login for secure access control with an option to fully disable traditional password login.
 - Has a public mode, where anyone can add links without authentication. Deleting
   or listing available links will need admin access using the password. It's also
   possible to completely disable the frontend. It's also possible to force an expiry

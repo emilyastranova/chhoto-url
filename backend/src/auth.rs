@@ -113,8 +113,8 @@ pub(crate) fn gen_key() -> String {
 
 // Validate a session
 fn is_session_valid(session: Session, config: &Config) -> bool {
-    // If there's no password provided, just return true
-    if config.password.is_none() {
+    // If there's no password provided and password auth is NOT disabled, just return true
+    if config.password.is_none() && !config.disable_password_auth {
         return true;
     }
 
@@ -173,7 +173,7 @@ impl FromRequest for Auth {
         }
 
         // Session auth
-        if config.password.is_none() {
+        if config.password.is_none() && !config.disable_password_auth {
             return ready(Ok(Auth::NoPass));
         }
         let session = req.get_session();

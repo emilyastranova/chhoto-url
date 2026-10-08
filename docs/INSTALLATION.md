@@ -281,6 +281,30 @@ served through a proxy.
 This can be used to set the number of items shown per page in the frontend. This does not have any effect on the backend code.
 Defaults to 10.
 
+### `CHHOTO_CUSTOM_LOGO_URL`
+
+URL/path for a custom logo on the page. If specified, this image will replace the default logo (`assets/favicon.svg`) on the page.
+
+### `CHHOTO_CUSTOM_QR_LOGO_URL`
+
+URL/path for a separate custom logo to place in the center of generated QR codes. If specified, this image will be used instead of the default `assets/favicon.svg`.
+
+### `CHHOTO_GOOGLE_CLIENT_ID`
+
+Google OAuth Client ID to enable Google SSO authentication.
+
+### `CHHOTO_GOOGLE_CLIENT_SECRET`
+
+Google OAuth Client Secret.
+
+### `CHHOTO_GOOGLE_ALLOWED_EMAILS`
+
+A comma-separated list of allowed Google emails or email domains (e.g. `user@example.com` or `@example.com`). If specified, only users authenticating with these Google accounts will be allowed to log in. If not specified, any Google account can log in (not recommended).
+
+### `CHHOTO_DISABLE_PASSWORD_AUTH`
+
+Set this to `True` (or `true`/`1`) to disable the standard password authentication. This requires Google OAuth configuration (`CHHOTO_GOOGLE_CLIENT_ID` and `CHHOTO_GOOGLE_CLIENT_SECRET`) to be active, allowing you to back Chhoto URL exclusively with Google SSO.
+
 ### `CHHOTO_EXTRA_PROTOCOLS`
 
 Use this to allow extra protocols for longlinks. By default, only `http`, `https`, `ftp`, and `magnet` links are allowed. It should be a comma

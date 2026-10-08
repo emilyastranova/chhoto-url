@@ -183,6 +183,14 @@ pub(crate) async fn login(
     data: web::Data<AppState>,
 ) -> HttpResponse {
     let config = &data.config;
+    if config.disable_password_auth {
+        let response = JSONResponse {
+            success: false,
+            error: true,
+            reason: "Password authentication is disabled.".to_owned(),
+        };
+        return HttpResponse::Forbidden().json(response);
+    }
     if matches!(auth, Auth::ValidSession) {
         return HttpResponse::Ok().body("Already authorized.");
     }

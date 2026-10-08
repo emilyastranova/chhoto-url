@@ -47,6 +47,10 @@ pub(super) struct BackendConfig {
     pub(super) slug_length: usize,
     pub(super) try_longer_slug: bool,
     pub(super) frontend_page_size: u16,
+    pub(super) custom_logo_url: Option<String>,
+    pub(super) custom_qr_logo_url: Option<String>,
+    pub(super) google_auth_enabled: bool,
+    pub(super) disable_password_auth: bool,
 }
 
 // Needed to return the short URL to make it easier for programs leveraging the API

@@ -123,6 +123,8 @@ async fn main() -> Result<()> {
             .service(services::delete_link)
             .service(services::login)
             .service(services::logout)
+            .service(services::google_login)
+            .service(services::google_callback)
             .service(services::expand)
             .service(services::whoami);
 

@@ -132,6 +132,12 @@ pub(crate) struct Config {
     pub(crate) ensure_acid: bool,
     pub(crate) disable_backups: bool,
     pub(crate) frontend_page_size: u16,
+    pub(crate) custom_logo_url: Option<String>,
+    pub(crate) custom_qr_logo_url: Option<String>,
+    pub(crate) google_client_id: Option<String>,
+    pub(crate) google_client_secret: Option<String>,
+    pub(crate) google_allowed_emails: Vec<String>,
+    pub(crate) disable_password_auth: bool,
 }
 
 pub(crate) fn read() -> Config {
@@ -387,6 +393,41 @@ pub(crate) fn read() -> Config {
         .inspect(|s| info!("Frontend page size is set to {s}."))
         .unwrap_or(10);
 
+    let custom_logo_url = read_config_wrapper("CHHOTO_CUSTOM_LOGO_URL", "custom_logo_url")
+        .ok()
+        .map(|s| s.trim().to_owned())
+        .filter(|s| !s.is_empty())
+        .inspect(|logo| info!("Custom logo URL: {logo}"));
+
+    let custom_qr_logo_url = read_config_wrapper("CHHOTO_CUSTOM_QR_LOGO_URL", "custom_qr_logo_url")
+        .ok()
+        .map(|s| s.trim().to_owned())
+        .filter(|s| !s.is_empty())
+        .inspect(|qr_logo| info!("Custom QR logo URL: {qr_logo}"));
+
+    let google_client_id = read_config_wrapper("CHHOTO_GOOGLE_CLIENT_ID", "google_client_id")
+        .ok()
+        .map(|s| s.trim().to_owned())
+        .filter(|s| !s.is_empty());
+
+    let google_client_secret = read_config_wrapper("CHHOTO_GOOGLE_CLIENT_SECRET", "google_client_secret")
+        .ok()
+        .map(|s| s.trim().to_owned())
+        .filter(|s| !s.is_empty());
+
+    let mut google_allowed_emails: Vec<String> = Vec::new();
+    if let Ok(emails) = read_config_wrapper("CHHOTO_GOOGLE_ALLOWED_EMAILS", "google_allowed_emails") {
+        for email in emails.split(&[',', ' ']).filter(|p| !p.is_empty()) {
+            google_allowed_emails.push(email.trim().to_lowercase());
+        }
+    }
+    if !google_allowed_emails.is_empty() {
+        info!("Google OAuth allowed emails/domains: {:?}", google_allowed_emails);
+    }
+
+    let disable_password_auth = read_config_wrapper("CHHOTO_DISABLE_PASSWORD_AUTH", "disable_password_auth")
+        .is_ok_and(|s| s.trim() == "True" || s.trim() == "true" || s.trim() == "1");
+
     Config {
         listen_address,
         port,
@@ -411,5 +452,11 @@ pub(crate) fn read() -> Config {
         ensure_acid,
         disable_backups,
         frontend_page_size,
+        custom_logo_url,
+        custom_qr_logo_url,
+        google_client_id,
+        google_client_secret,
+        google_allowed_emails,
+        disable_password_auth,
     }
 }

@@ -104,5 +104,5 @@ async fn auth_verification() {
 
     let req = test::TestRequest::get().uri("/api/getconfig").to_request();
     let resp = test::call_service(&app, req).await;
-    assert_eq!(resp.status(), 401);
+    assert_eq!(resp.status(), 200);
 }

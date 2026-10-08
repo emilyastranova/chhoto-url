@@ -70,6 +70,12 @@ pub(super) fn default_config(test: &str) -> config::Config {
         ensure_acid: false,
         disable_backups: true,
         frontend_page_size: 10,
+        custom_logo_url: None,
+        custom_qr_logo_url: None,
+        google_client_id: None,
+        google_client_secret: None,
+        google_allowed_emails: Vec::new(),
+        disable_password_auth: false,
     }
 }
 
