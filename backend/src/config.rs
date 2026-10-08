@@ -428,6 +428,18 @@ pub(crate) fn read() -> Config {
     let disable_password_auth = read_config_wrapper("CHHOTO_DISABLE_PASSWORD_AUTH", "disable_password_auth")
         .is_ok_and(|s| s.trim() == "True" || s.trim() == "true" || s.trim() == "1");
 
+    if google_client_id.is_some() && google_client_secret.is_some() {
+        info!("Google OAuth is enabled.");
+        if disable_password_auth {
+            info!("Password authentication is disabled. SSO is required.");
+        }
+    } else {
+        info!("Google OAuth is disabled.");
+        if google_client_id.is_some() || google_client_secret.is_some() {
+            warn!("Google OAuth setup is incomplete! Make sure both CHHOTO_GOOGLE_CLIENT_ID and CHHOTO_GOOGLE_CLIENT_SECRET are set.");
+        }
+    }
+
     Config {
         listen_address,
         port,

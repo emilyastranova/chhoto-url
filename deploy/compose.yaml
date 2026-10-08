@@ -4,6 +4,9 @@
 services:
   chhoto-url:
     image: emilyastranova/chhoto-url:alpine
+    build:
+      context: ..
+      dockerfile: deploy/Containerfile.alpine
     # image: emilyastranova/chhoto-url:alpine # for extra convenience
     # The images can also be pulled from ghcr.io
     restart: unless-stopped
