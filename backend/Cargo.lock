@@ -520,7 +520,7 @@ dependencies = [
 
 [[package]]
 name = "chhoto-url"
-version = "7.8.3"
+version = "7.9.0"
 dependencies = [
  "actix-files",
  "actix-http",
