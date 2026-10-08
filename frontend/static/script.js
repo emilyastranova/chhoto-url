@@ -169,7 +169,10 @@ const showVersion = () => {
   }
 };
 
-const showLogin = () => {
+const showLogin = async () => {
+  if (CONFIG == null) {
+    await getConfig();
+  }
   if (NO_PASS) {
     document.getElementById("password").value = "";
     document.getElementById("login-checkbox").checked = false;
@@ -291,7 +294,7 @@ const refreshData = async () => {
         case "nobody":
           clearCachedState();
           cacheNoPass(false);
-          showLogin();
+          await showLogin();
           return;
 
         case "public":
@@ -318,7 +321,7 @@ const refreshData = async () => {
         case "nobody-nopass":
           cacheNoPass(true);
           document.getElementById("admin-button").hidden = true;
-          showLogin();
+          await showLogin();
           return;
 
         case "admin":
