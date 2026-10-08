@@ -6,12 +6,14 @@ services:
     image: emilyastranova/chhoto-url:alpine
     build:
       context: ..
-      dockerfile: deploy/Containerfile.alpine
+      dockerfile: deploy/Containerfile.local
     # image: emilyastranova/chhoto-url:alpine # for extra convenience
     # The images can also be pulled from ghcr.io
     restart: unless-stopped
     container_name: chhoto-url
     tty: true
+    env_file:
+      - .env
     # mem_limit: "50m"
     # You may enable the next two options if you want. Make sure that you run the container as the proper
     # user. In most cases, user: 1000:1000 should work. You might also need to mount a directory with your
@@ -58,7 +60,7 @@ services:
       # - CHHOTO_LISTEN_PORT=4567
       # - CHHOTO_LISTEN_ADDRESS=0.0.0.0
 
-      - CHHOTO_PASSWORD=TopSecretPass
+      # - CHHOTO_PASSWORD=TopSecretPass
 
       # This needs to be set in order to use programs that use the JSON interface of Chhoto URL.
       # You will get a warning if this is insecure, and a generated value will be output
@@ -112,6 +114,13 @@ services:
 
       # You may set the TZ variable for timezone in logging, but it will only work in the alpine builds
       # TZ=America, Chicago
+
+      # TZ=America, Chicago
+      - CHHOTO_GOOGLE_CLIENT_ID=${CHHOTO_GOOGLE_CLIENT_ID}
+      - CHHOTO_GOOGLE_CLIENT_SECRET=${CHHOTO_GOOGLE_CLIENT_SECRET}
+      - CHHOTO_DISABLE_PASSWORD_AUTH=${CHHOTO_DISABLE_PASSWORD_AUTH}
+      - CHHOTO_CUSTOM_SITE_TITLE=${CHHOTO_CUSTOM_SITE_TITLE}
+
     volumes:
       - data:/data
     # Disable this if using the scratch images.
@@ -124,3 +133,4 @@ services:
 
 volumes:
   db:
+  data:
