@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 image:
-  repository: sintan1729/chhoto-url
+  repository: emilyastranova/chhoto-url
   pullPolicy: IfNotPresent
   tag: "latest"
 

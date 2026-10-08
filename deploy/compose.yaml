@@ -3,8 +3,8 @@
 
 services:
   chhoto-url:
-    image: sintan1729/chhoto-url:alpine
-    # image: sintan1729/chhoto-url:alpine # for extra convenience
+    image: emilyastranova/chhoto-url:alpine
+    # image: emilyastranova/chhoto-url:alpine # for extra convenience
     # The images can also be pulled from ghcr.io
     restart: unless-stopped
     container_name: chhoto-url

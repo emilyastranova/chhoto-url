@@ -12,8 +12,8 @@ Description=Caddy
 
 [Container]
 ContainerName=chhoto-url
-Image=docker.io/sintan1729/chhoto-url:alpine
-#Image=docker.io/sintan1729/chhoto-url:alpine # for extra convenience
+Image=docker.io/emilyastranova/chhoto-url:alpine
+#Image=docker.io/emilyastranova/chhoto-url:alpine # for extra convenience
 #The images can also be pulled from ghcr.io
 PodmanArgs=--tty
 PublishPort=4567:4567
